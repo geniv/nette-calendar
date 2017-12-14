@@ -1,0 +1,31 @@
+{snippet calendar}
+    <table class="table">
+        <tr>
+            <th>den</th>
+            <th colspan="{count($timeTable[0]['hours'])}">{_'available-time-block'}</th>
+        </tr>
+        <tr n:foreach="$timeTable as $dayIndex => $dayItem">
+            <td n:class="$dayItem['current'] ? info">{$dayItem['day']|date:'j.n.Y (N)'}</td>
+            <td n:foreach="$dayItem['hours'] as $hourIndex => $hourItem" n:class="$dayItem['current'] ? info : ($selectDay == $hourItem['hour'] ? success : ($hourItem['select']?danger))">
+                {if $hourItem['select']}
+                    {$hourItem['hour']|date:'H:i'}
+                {else}
+                    <a n:if="!$dayItem['current']" n:href="SelectDate! $seekDay, $hourItem['hour']" class="ajax">
+                        {$hourItem['hour']|date:'H:i'}
+                    </a>
+                    <a n:if="$dayItem['current']" n:href="InactiveDate! $hourItem['hour']" class="ajax">
+                        {$hourItem['hour']|date:'H:i'}
+                    </a>
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <a n:href="PrevWeek! $seekDay" class="ajax" n:if="$seekDay > 0">{_'previous-week'}</a>
+            </td>
+            <td colspan="5">
+                <a n:href="NextWeek! $seekDay" class="ajax">{_'next-week'}</a>
+            </td>
+        </tr>
+    </table>
+{/snippet}
