@@ -2,6 +2,7 @@
 
 namespace Calendar\Bridges\Nette;
 
+use Calendar\Processor;
 use Calendar\WeekCalendar;
 use Nette\DI\CompilerExtension;
 
@@ -16,7 +17,14 @@ class Extension extends CompilerExtension
 {
     /** @var array default values */
     private $defaults = [
-        'week' => [],
+        'autowired'  => null,
+        'processor'  => Processor::class,
+        'offsetDay'  => 7,
+        'firstDay'   => 0,
+        'lastDay'    => 6,
+        'fromTime'   => 11,
+        'countBlock' => 10,
+        'stepBlock'  => '+1 hour +30 minute',
     ];
 
 
@@ -31,5 +39,18 @@ class Extension extends CompilerExtension
         // define week calendar
         $builder->addDefinition($this->prefix('week'))
             ->setFactory(WeekCalendar::class, [$config]);
+
+        // define week calendar
+        $builder->addDefinition($this->prefix('processor'))
+            ->setFactory($config['processor']);
+
+        // if define autowired then set value
+        if (isset($config['autowired'])) {
+            $builder->getDefinition($this->prefix('default'))
+                ->setAutowired($config['autowired']);
+
+            $builder->getDefinition($this->prefix('processor'))
+                ->setAutowired($config['autowired']);
+        }
     }
 }
