@@ -24,14 +24,18 @@ neon configure:
 # calendar
 calendar:
 #   autowired: false    # default null, false => disable autowiring (in case multiple linked extension) | self
-#   processor: Calendar\Processor::class
+#   processor: Calendar\Processor
     offsetDay: 7    # offset next day
     firstDay: 0     # number first day
     lastDay: 6      # number last day
     fromTime: 11    # number from hour (modify)
     countBlock: 7   # count block hour (modify)
-    stepBlock: +1 hour +30 minute  # offset hour (modify)
+    stepBlock: "+1 hour +30 minute" # offset hour (modify)
 ```
+
+Logic processor:
+----------------
+must implemented interface: `Calendar\IProcessor` with process method for self logic calendar
 
 neon configure extension:
 ```neon

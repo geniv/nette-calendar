@@ -20,8 +20,6 @@ class WeekCalendar extends Control
     private $templatePath;
     /** @var ITranslator */
     private $translator = null;
-    /** @var array */
-    private $timeTable = [];
     /** @var int */
     private $seekDay = 0;
     /** @var int */
@@ -52,8 +50,6 @@ class WeekCalendar extends Control
         $this->processor = $processor;
 
         $this->templatePath = __DIR__ . '/WeekCalendar.latte';  // set path
-
-        $this->processCalendar();
     }
 
 
@@ -90,7 +86,6 @@ class WeekCalendar extends Control
     {
         $this->seekDay = $seekDay - $this->parameters['offsetDay'];
 
-        $this->processCalendar();   // re-process
         if ($this->presenter->isAjax()) {
             $this->redrawControl('calendar');
         }
@@ -106,7 +101,6 @@ class WeekCalendar extends Control
     {
         $this->seekDay = $seekDay + $this->parameters['offsetDay'];
 
-        $this->processCalendar();   // re-process
         if ($this->presenter->isAjax()) {
             $this->redrawControl('calendar');
         }
@@ -125,11 +119,9 @@ class WeekCalendar extends Control
             $this->seekDay = $seekDay;
             $this->selectDay = $timestamp;
 
-            $this->processCalendar();   // re-process
             if ($this->presenter->isAjax()) {
                 $this->redrawControl('calendar');
             }
-
             $this->onSelectDate($timestamp);
         }
     }
@@ -166,7 +158,6 @@ class WeekCalendar extends Control
     public function setSelectDate(array $values): self
     {
         $this->selectDate = $values;
-        $this->processCalendar();   // re-process
         return $this;
     }
 
@@ -222,15 +213,6 @@ class WeekCalendar extends Control
 
 
     /**
-     * Process calendar.
-     */
-    private function processCalendar()
-    {
-        $this->timeTable = $this->processor->process($this);
-    }
-
-
-    /**
      * Render.
      */
     public function render()
@@ -238,7 +220,7 @@ class WeekCalendar extends Control
         if ($this->parameters) {
             $template = $this->getTemplate();
 
-            $template->timeTable = $this->timeTable;
+            $template->timeTable = $this->processor->process($this);
             $template->seekDay = $this->seekDay;
             $template->selectDay = $this->selectDay;
 

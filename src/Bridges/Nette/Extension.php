@@ -40,7 +40,7 @@ class Extension extends CompilerExtension
         $builder->addDefinition($this->prefix('week'))
             ->setFactory(WeekCalendar::class, [$config]);
 
-        // define week calendar
+        // define week calendar logic processor
         $builder->addDefinition($this->prefix('processor'))
             ->setFactory($config['processor']);
 
