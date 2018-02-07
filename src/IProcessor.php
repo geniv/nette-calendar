@@ -1,15 +1,21 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: geniv
- * Date: 7.2.18
- * Time: 12:22
- */
+<?php declare(strict_types=1);
 
 namespace Calendar;
 
-
-class IProcessor
+/**
+ * Interface IProcessor
+ *
+ * @author  geniv
+ * @package Calendar
+ */
+interface IProcessor
 {
 
+    /**
+     * Process.
+     *
+     * @param WeekCalendar $weekCalendar
+     * @return array
+     */
+    public function process(WeekCalendar $weekCalendar): array;
 }

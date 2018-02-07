@@ -16,7 +16,12 @@ class Extension extends CompilerExtension
 {
     /** @var array default values */
     private $defaults = [
-        'week' => [],
+        'offsetDay'  => 7,
+        'firstDay'   => 0,
+        'lastDay'    => 6,
+        'fromTime'   => 11,
+        'countBlock' => 10,
+        'stepBlock'  => '+1 hour +30 minute',
     ];
 
 

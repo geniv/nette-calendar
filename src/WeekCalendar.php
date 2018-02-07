@@ -33,6 +33,14 @@ class WeekCalendar extends Control
     public $onInactiveDate;
     /** @var array */
     private $selectDate = [];
+    /** @var int */
+    private $fromTime;
+    /** @var int */
+    private $countBlock;
+    /** @var string */
+    private $stepBlock;
+    /** @var IProcessor */
+    private $processor;
 
 
     /**
@@ -40,17 +48,34 @@ class WeekCalendar extends Control
      *
      * @param array            $parameters
      * @param ITranslator|null $translator
+     * @param IProcessor       $processor
      */
-    public function __construct(array $parameters, ITranslator $translator = null)
+    public function __construct(array $parameters, ITranslator $translator = null, IProcessor $processor)
     {
         parent::__construct();
 
-        $this->parameters = (isset($parameters['week']) ? $parameters['week'] : []);
+        $this->parameters = $parameters;
         $this->translator = $translator;
+        $this->processor = $processor;
 
-        $this->templatePath = __DIR__ . '/WeekCalendar.latte';  // implicit path
+        $this->fromTime = $this->parameters['fromTime'];
+        $this->countBlock = $this->parameters['countBlock'];
+        $this->stepBlock = $this->parameters['stepBlock'];
+
+        $this->templatePath = __DIR__ . '/WeekCalendar.latte';  // set path
 
         $this->processCalendar();
+    }
+
+
+    /**
+     * Get parameters.
+     *
+     * @return array
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 
 
@@ -135,13 +160,85 @@ class WeekCalendar extends Control
     /**
      * Set select date.
      *
-     * @param $values
+     * @param array $values
      * @return WeekCalendar
      */
-    public function setSelectDate($values): self
+    public function setSelectDate(array $values): self
     {
         $this->selectDate = $values;
         $this->processCalendar();   // re-process
+        return $this;
+    }
+
+
+    /**
+     * Set from time.
+     *
+     * @param int $fromTime
+     * @return WeekCalendar
+     */
+    public function setFromTime(int $fromTime): self
+    {
+        $this->fromTime = $fromTime;
+        return $this;
+    }
+
+
+    /**
+     * Get count block.
+     *
+     * @return int
+     */
+    public function getCountBlock(): int
+    {
+        return $this->countBlock;
+    }
+
+
+    /**
+     * Set count block.
+     *
+     * @param int $countBlock
+     * @return WeekCalendar
+     */
+    public function setCountBlock(int $countBlock): self
+    {
+        $this->countBlock = $countBlock;
+        return $this;
+    }
+
+
+    /**
+     * Get step block.
+     *
+     * @return string
+     */
+    public function getStepBlock(): string
+    {
+        return $this->stepBlock;
+    }
+
+
+    /**
+     * Get from time.
+     *
+     * @return int
+     */
+    public function getFromTime(): int
+    {
+        return $this->fromTime;
+    }
+
+
+    /**
+     * Set step block.
+     *
+     * @param string $stepBlock
+     * @return WeekCalendar
+     */
+    public function setStepBlock(string $stepBlock): self
+    {
+        $this->stepBlock = $stepBlock;
         return $this;
     }
 
@@ -151,25 +248,7 @@ class WeekCalendar extends Control
      */
     private function processCalendar()
     {
-        foreach (range($this->parameters['firstDay'], $this->parameters['lastDay']) as $indexDay) {
-            $day = new DateTime;
-            $day->modify('+' . $indexDay . ' day +' . $this->seekDay . ' day')->setTime($this->parameters['fromTime'], 0);
-
-            $this->timeTable[$indexDay] = [
-                'day'     => $day,
-                'current' => (new DateTime)->format('Y-m-d') == $day->format('Y-m-d'),
-            ];
-
-            $this->timeTable[$indexDay]['hours'] = [];
-            foreach (range($this->parameters['firstHour'], $this->parameters['lastHour']) as $indexHour) {
-                $hour = clone $this->timeTable[$indexDay]['day'];
-                $this->timeTable[$indexDay]['hours'][$indexHour] = [
-                    'hour'   => $hour->getTimestamp(),  // return GTM timestamp
-                    'select' => in_array($hour, $this->selectDate),
-                ];
-                $this->timeTable[$indexDay]['day']->modify($this->parameters['hourModify']);
-            }
-        }
+        $this->timeTable = $this->processor->process($this);
     }
 
 

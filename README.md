@@ -23,14 +23,12 @@ neon configure:
 ```neon
 # calendar
 calendar:
-    week:
-        offsetDay: 7    # offset next day
-        firstDay: 0     # number first day
-        lastDay: 6      # number last day
-        fromTime: 11    # number from hour
-        firstHour: 0    # number fist hour
-        lastHour: 7     # number last hour
-        hourModify: +1 hour +30 minute  # offset hour
+    offsetDay: 7    # offset next day
+    firstDay: 0     # number first day
+    lastDay: 6      # number last day
+    fromTime: 11    # number from hour (modify)
+    countBlock: 7   # count block hour (modify)
+    stepBlock: +1 hour +30 minute  # offset hour (modify)
 ```
 
 neon configure extension:
