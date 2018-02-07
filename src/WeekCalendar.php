@@ -32,12 +32,6 @@ class WeekCalendar extends Control
     public $onInactiveDate;
     /** @var array */
     private $selectDate = [];
-    /** @var int */
-    private $fromTime;
-    /** @var int */
-    private $countBlock;
-    /** @var string */
-    private $stepBlock;
     /** @var IProcessor */
     private $processor;
 
@@ -56,10 +50,6 @@ class WeekCalendar extends Control
         $this->parameters = $parameters;
         $this->translator = $translator;
         $this->processor = $processor;
-
-        $this->fromTime = $this->parameters['fromTime'];
-        $this->countBlock = $this->parameters['countBlock'];
-        $this->stepBlock = $this->parameters['stepBlock'];
 
         $this->templatePath = __DIR__ . '/WeekCalendar.latte';  // set path
 
@@ -189,19 +179,8 @@ class WeekCalendar extends Control
      */
     public function setFromTime(int $fromTime): self
     {
-        $this->fromTime = $fromTime;
+        $this->parameters['fromTime'] = $fromTime;
         return $this;
-    }
-
-
-    /**
-     * Get count block.
-     *
-     * @return int
-     */
-    public function getCountBlock(): int
-    {
-        return $this->countBlock;
     }
 
 
@@ -213,30 +192,8 @@ class WeekCalendar extends Control
      */
     public function setCountBlock(int $countBlock): self
     {
-        $this->countBlock = $countBlock;
+        $this->parameters['countBlock'] = $countBlock;
         return $this;
-    }
-
-
-    /**
-     * Get step block.
-     *
-     * @return string
-     */
-    public function getStepBlock(): string
-    {
-        return $this->stepBlock;
-    }
-
-
-    /**
-     * Get from time.
-     *
-     * @return int
-     */
-    public function getFromTime(): int
-    {
-        return $this->fromTime;
     }
 
 
@@ -248,7 +205,7 @@ class WeekCalendar extends Control
      */
     public function setStepBlock(string $stepBlock): self
     {
-        $this->stepBlock = $stepBlock;
+        $this->parameters['stepBlock'] = $stepBlock;
         return $this;
     }
 

@@ -23,6 +23,8 @@ neon configure:
 ```neon
 # calendar
 calendar:
+#   autowired: false    # default null, false => disable autowiring (in case multiple linked extension) | self
+#   processor: Calendar\Processor::class
     offsetDay: 7    # offset next day
     firstDay: 0     # number first day
     lastDay: 6      # number last day

@@ -27,24 +27,23 @@ class Processor implements IProcessor
         $result = [];
         foreach (range($parameters['firstDay'], $parameters['lastDay']) as $indexDay) {
             $day = new DateTime;
-            $day->modify('+' . $indexDay . ' day +' . $weekCalendar->getSeekDay() . ' day')->setTime($weekCalendar->getFromTime(), 0);
+            $day->modify('+' . $indexDay . ' day +' . $weekCalendar->getSeekDay() . ' day')->setTime($parameters['fromTime'], 0);
 
-            $timeTable[$indexDay] = [
+            $result[$indexDay] = [
                 'day'     => $day,
                 'current' => (new DateTime)->format('Y-m-d') == $day->format('Y-m-d'),
             ];
 
             $result[$indexDay]['hours'] = [];
-            foreach (range(0, $weekCalendar->getCountBlock()) as $indexHour) {
-                $hour = clone $timeTable[$indexDay]['day'];
-                $timeTable[$indexDay]['hours'][$indexHour] = [
+            foreach (range(0, $parameters['countBlock']) as $indexHour) {
+                $hour = clone $result[$indexDay]['day'];
+                $result[$indexDay]['hours'][$indexHour] = [
                     'hour'   => $hour->getTimestamp(),  // return GTM timestamp
                     'select' => in_array($hour, $weekCalendar->getSelectDate()),
                 ];
-                $timeTable[$indexDay]['day']->modify($weekCalendar->getStepBlock());
+                $result[$indexDay]['day']->modify($parameters['stepBlock']);
             }
         }
-
         return $result;
     }
 }
