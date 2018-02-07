@@ -2,6 +2,9 @@
 
 namespace Calendar;
 
+use DateTime;
+
+
 /**
  * Class Processor
  *
@@ -19,26 +22,26 @@ class Processor implements IProcessor
      */
     public function process(WeekCalendar $weekCalendar): array
     {
-//        $parameters = $weekCalendar;
-//FIXME dodelat, musi to byt takto a ne dedic!
-        $result = [];
-        foreach (range($this->parameters['firstDay'], $this->parameters['lastDay']) as $indexDay) {
-            $day = new DateTime;
-            $day->modify('+' . $indexDay . ' day +' . $this->seekDay . ' day')->setTime($weekCalendar->getFromTime(), 0);
+        $parameters = $weekCalendar->getParameters();
 
-            $this->timeTable[$indexDay] = [
+        $result = [];
+        foreach (range($parameters['firstDay'], $parameters['lastDay']) as $indexDay) {
+            $day = new DateTime;
+            $day->modify('+' . $indexDay . ' day +' . $weekCalendar->getSeekDay() . ' day')->setTime($weekCalendar->getFromTime(), 0);
+
+            $timeTable[$indexDay] = [
                 'day'     => $day,
                 'current' => (new DateTime)->format('Y-m-d') == $day->format('Y-m-d'),
             ];
 
-            $this->timeTable[$indexDay]['hours'] = [];
+            $result[$indexDay]['hours'] = [];
             foreach (range(0, $weekCalendar->getCountBlock()) as $indexHour) {
-                $hour = clone $this->timeTable[$indexDay]['day'];
-                $this->timeTable[$indexDay]['hours'][$indexHour] = [
+                $hour = clone $timeTable[$indexDay]['day'];
+                $timeTable[$indexDay]['hours'][$indexHour] = [
                     'hour'   => $hour->getTimestamp(),  // return GTM timestamp
-                    'select' => in_array($hour, $this->selectDate),
+                    'select' => in_array($hour, $weekCalendar->getSelectDate()),
                 ];
-                $this->timeTable[$indexDay]['day']->modify($weekCalendar->getStepBlock());
+                $timeTable[$indexDay]['day']->modify($weekCalendar->getStepBlock());
             }
         }
 

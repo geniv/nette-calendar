@@ -2,7 +2,6 @@
 
 namespace Calendar;
 
-use DateTime;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 
@@ -158,6 +157,17 @@ class WeekCalendar extends Control
 
 
     /**
+     * Get select date.
+     *
+     * @return array
+     */
+    public function getSelectDate(): array
+    {
+        return $this->selectDate;
+    }
+
+
+    /**
      * Set select date.
      *
      * @param array $values
@@ -240,6 +250,17 @@ class WeekCalendar extends Control
     {
         $this->stepBlock = $stepBlock;
         return $this;
+    }
+
+
+    /**
+     * Get seek day.
+     *
+     * @return int
+     */
+    public function getSeekDay(): int
+    {
+        return $this->seekDay;
     }
 
 
