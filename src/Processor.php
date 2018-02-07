@@ -8,7 +8,7 @@ namespace Calendar;
  * @author  geniv
  * @package Calendar
  */
-class Processor extends WeekCalendar implements IProcessor
+class Processor implements IProcessor
 {
 
     /**
@@ -20,7 +20,7 @@ class Processor extends WeekCalendar implements IProcessor
     public function process(WeekCalendar $weekCalendar): array
     {
 //        $parameters = $weekCalendar;
-
+//FIXME dodelat, musi to byt takto a ne dedic!
         $result = [];
         foreach (range($this->parameters['firstDay'], $this->parameters['lastDay']) as $indexDay) {
             $day = new DateTime;
@@ -41,5 +41,7 @@ class Processor extends WeekCalendar implements IProcessor
                 $this->timeTable[$indexDay]['day']->modify($weekCalendar->getStepBlock());
             }
         }
+
+        return $result;
     }
 }
