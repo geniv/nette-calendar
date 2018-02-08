@@ -175,7 +175,7 @@ class WeekCalendar extends Control
         $diff = $selectDate->diff(new DateTime());
         // calculate offset day
         $offsetDay = $this->parameters['offsetDay'];
-        $seekDay = intval(round($diff->days / $offsetDay) * $offsetDay);
+        $seekDay = intval(floor($diff->days / $offsetDay) * $offsetDay);
 
         $this->handleSelectDate($seekDay, $selectDate->getTimestamp());
         return $this;
