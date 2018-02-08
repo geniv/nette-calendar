@@ -166,19 +166,18 @@ class WeekCalendar extends Control
     /**
      * Select date.
      *
-     * @param int $timestamp
+     * @param string $date
      * @return WeekCalendar
      */
-    public function selectDate(int $timestamp): self
+    public function selectDate(string $date): self
     {
-        $selectDate = new DateTime();
-        $selectDate->setTimestamp($timestamp);
+        $selectDate = new DateTime($date);
         $diff = $selectDate->diff(new DateTime());
         // calculate offset day
         $offsetDay = $this->parameters['offsetDay'];
         $seekDay = intval(round($diff->days / $offsetDay) * $offsetDay);
 
-        $this->handleSelectDate($seekDay, $timestamp);
+        $this->handleSelectDate($seekDay, $selectDate->getTimestamp());
         return $this;
     }
 

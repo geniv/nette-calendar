@@ -59,7 +59,7 @@ $weekCalendar->setLoadData(array $dates);
 select date:
 ------------
 ```php
-$weekCalendar->selectDate($timestamp);
+$weekCalendar->selectDate($date);
 ```
 
 usage:
