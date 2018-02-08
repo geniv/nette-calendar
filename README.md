@@ -50,10 +50,16 @@ onInactiveDate(int $timestamp)
 onSelectDate(int $timestamp)
 ```
 
-setter load date:
--------------------
+load date:
+----------
 ```php
 $weekCalendar->setLoadData(array $dates);
+```
+
+select date:
+------------
+```php
+$weekCalendar->selectDate($timestamp);
 ```
 
 usage:

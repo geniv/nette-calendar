@@ -2,6 +2,7 @@
 
 namespace Calendar;
 
+use DateTime;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 
@@ -170,7 +171,13 @@ class WeekCalendar extends Control
      */
     public function selectDate(int $timestamp): self
     {
-        $seekDay = 0; //TODO vypocet seek-u!
+        $selectDate = new DateTime();
+        $selectDate->setTimestamp($timestamp);
+        $diff = $selectDate->diff(new DateTime());
+        // calculate offset day
+        $offsetDay = $this->parameters['offsetDay'];
+        $seekDay = intval(round($diff->days / $offsetDay) * $offsetDay);
+
         $this->handleSelectDate($seekDay, $timestamp);
         return $this;
     }
