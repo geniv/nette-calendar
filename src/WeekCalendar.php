@@ -123,7 +123,7 @@ class WeekCalendar extends Control
             if ($this->presenter->isAjax()) {
                 $this->redrawControl('calendar');
             }
-            $this->onSelectDate($timestamp);
+            $this->onSelectDate((new DateTime())->setTimestamp($timestamp));
         }
     }
 
@@ -135,7 +135,7 @@ class WeekCalendar extends Control
      */
     public function handleInactiveDate(int $timestamp)
     {
-        $this->onInactiveDate($timestamp);
+        $this->onInactiveDate((new DateTime())->setTimestamp($timestamp));
     }
 
 
@@ -173,7 +173,7 @@ class WeekCalendar extends Control
     {
         $selectDate = new DateTime($date);
         $diff = $selectDate->diff(new DateTime());
-        // calculate offset day
+        // calculate day offset
         $offsetDay = $this->parameters['offsetDay'];
         $seekDay = intval(floor($diff->days / $offsetDay) * $offsetDay);
 

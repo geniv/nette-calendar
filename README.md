@@ -46,8 +46,8 @@ extensions:
 callback:
 ---------
 ```php
-onInactiveDate(int $timestamp)
-onSelectDate(int $timestamp)
+onInactiveDate(DateTime $date)
+onSelectDate(DateTime $date)
 ```
 
 load date:
@@ -69,15 +69,15 @@ protected function createComponentWeekCalendar(WeekCalendar $weekCalendar): Week
     $dates = $this->reservationModel->getList()->where(['active' => true])->fetchPairs('id', 'date');
     $weekCalendar->setLoadData($dates);
 
-    $weekCalendar->onInactiveDate[] = function ($timestamp) {
+    $weekCalendar->onInactiveDate[] = function (DateTime $date) {
         // callback inactive row
     };
     
-    $weekCalendar->onSelectDate[] = function ($timestamp) {
-        $this->template->datum = $timestamp;
+    $weekCalendar->onSelectDate[] = function (DateTime $date) {
+        $this->template->datum = $date;
 
         $this['reservationForm']->setDefaults([
-            'date' => date('Y-m-d H:i:s', $timestamp),
+            'date' => $date,
         ]);
 
         if ($this->isAjax()) {
