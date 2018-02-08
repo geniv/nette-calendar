@@ -39,7 +39,7 @@ class Processor implements IProcessor
                 $hour = clone $result[$indexDay]['day'];
                 $result[$indexDay]['hours'][$indexHour] = [
                     'hour'   => $hour->getTimestamp(),  // return GTM timestamp
-                    'select' => in_array($hour, $weekCalendar->getSelectDate()),
+                    'select' => in_array($hour, $weekCalendar->getLoadData()),
                 ];
                 $result[$indexDay]['day']->modify($parameters['stepBlock']);
             }
