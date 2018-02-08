@@ -50,10 +50,16 @@ onInactiveDate(int $timestamp)
 onSelectDate(int $timestamp)
 ```
 
-setter select date:
--------------------
+load date:
+----------
 ```php
-$weekCalendar->setSelectDate(array $dates);
+$weekCalendar->setLoadData(array $dates);
+```
+
+select date:
+------------
+```php
+$weekCalendar->selectDate($timestamp);
 ```
 
 usage:
@@ -61,7 +67,7 @@ usage:
 protected function createComponentWeekCalendar(WeekCalendar $weekCalendar): WeekCalendar
 {
     $dates = $this->reservationModel->getList()->where(['active' => true])->fetchPairs('id', 'date');
-    $weekCalendar->setSelectDate($dates);
+    $weekCalendar->setLoadData($dates);
 
     $weekCalendar->onInactiveDate[] = function ($timestamp) {
         // callback inactive row

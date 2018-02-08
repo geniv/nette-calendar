@@ -2,6 +2,7 @@
 
 namespace Calendar;
 
+use DateTime;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 
@@ -29,7 +30,7 @@ class WeekCalendar extends Control
     /** @var callable */
     public $onInactiveDate;
     /** @var array */
-    private $selectDate = [];
+    private $loadData = [];
     /** @var IProcessor */
     private $processor;
 
@@ -143,21 +144,41 @@ class WeekCalendar extends Control
      *
      * @return array
      */
-    public function getSelectDate(): array
+    public function getLoadData(): array
     {
-        return $this->selectDate;
+        return $this->loadData;
     }
 
 
     /**
      * Set select date.
      *
-     * @param array $values
+     * @param array $data
      * @return WeekCalendar
      */
-    public function setSelectDate(array $values): self
+    public function setLoadData(array $data): self
     {
-        $this->selectDate = $values;
+        $this->loadData = $data;
+        return $this;
+    }
+
+
+    /**
+     * Select date.
+     *
+     * @param int $timestamp
+     * @return WeekCalendar
+     */
+    public function selectDate(int $timestamp): self
+    {
+        $selectDate = new DateTime();
+        $selectDate->setTimestamp($timestamp);
+        $diff = $selectDate->diff(new DateTime());
+        // calculate offset day
+        $offsetDay = $this->parameters['offsetDay'];
+        $seekDay = intval(round($diff->days / $offsetDay) * $offsetDay);
+
+        $this->handleSelectDate($seekDay, $timestamp);
         return $this;
     }
 
