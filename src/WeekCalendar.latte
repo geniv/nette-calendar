@@ -7,7 +7,7 @@
         <tr n:foreach="$timeTable as $dayIndex => $dayItem">
             <td n:class="$dayItem['current'] ? info">{$dayItem['day']|date:'j.n.Y (N)'}</td>
             <td n:foreach="$dayItem['hours'] as $hourIndex => $hourItem" n:class="$dayItem['current'] ? info : ($selectDay == $hourItem['hour'] ? success : ($hourItem['select']?danger))">
-                {if $hourItem['select']}
+                {if $hourItem['select'] || $selectDay == $hourItem['hour']}
                     {$hourItem['hour']|date:'H:i'}
                 {else}
                     <a n:if="!$dayItem['current']" n:href="SelectDate! $seekDay, $hourItem['hour']" class="ajax">
