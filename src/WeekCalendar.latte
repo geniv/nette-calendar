@@ -4,9 +4,9 @@
             <th>den</th>
             <th colspan="{count($timeTable[0]['hours'])}">{_'available-time-block'}</th>
         </tr>
-        <tr n:foreach="$timeTable as $dayIndex => $dayItem">
+        <tr n:foreach="$timeTable as $dayItem">
             <td n:class="$dayItem['current'] ? info">{$dayItem['day']|date:'j.n.Y (N)'}</td>
-            <td n:foreach="$dayItem['hours'] as $hourIndex => $hourItem" n:class="$dayItem['current'] ? info : ($selectDay == $hourItem['hour'] ? success : ($hourItem['select']?danger))">
+            <td n:foreach="$dayItem['hours'] as $hourItem" n:class="$dayItem['current'] ? info : ($selectDay == $hourItem['hour'] ? success : ($hourItem['select']?danger))">
                 {if $hourItem['select'] || $selectDay == $hourItem['hour']}
                     {$hourItem['hour']|date:'H:i'}
                 {else}
