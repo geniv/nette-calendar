@@ -69,6 +69,12 @@ protected function createComponentWeekCalendar(WeekCalendar $weekCalendar): Week
     $dates = $this->reservationModel->getList()->where(['active' => true])->fetchPairs('id', 'date');
     $weekCalendar->setLoadData($dates);
 
+    // setting calendar
+    $weekCalendar->setFromTime(11);
+    $weekCalendar->setCountBlock(10);
+    $weekCalendar->setStepBlock('+2 hour');
+    
+    // $weekCalendar->setTemplatePath(__DIR__ . '/templates/WeekCalendar.latte');
     $weekCalendar->onInactiveDate[] = function (DateTime $date) {
         // callback inactive row
     };
