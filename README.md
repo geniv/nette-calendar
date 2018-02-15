@@ -14,7 +14,8 @@ or
 require:
 ```json
 "php": ">=7.0.0",
-"nette/nette": ">=2.4.0"
+"nette/nette": ">=2.4.0",
+"geniv/nette-general-form": ">=1.0.0"
 ```
 
 Include in application
@@ -23,13 +24,13 @@ neon configure:
 ```neon
 # calendar
 calendar:
-#   autowired: false
+#   autowired: true
 #   processor: Calendar\Processor
     offsetDay: 7    # offset next day
     firstDay: 0     # number first day
     lastDay: 6      # number last day
     fromTime: 11    # number from hour (modify)
-    countBlock: 7   # count block hour (modify)
+    countBlock: 10  # count block hour (modify)
     stepBlock: "+1 hour +30 minute" # offset hour (modify)
 ```
 
@@ -84,7 +85,7 @@ protected function createComponentWeekCalendar(WeekCalendar $weekCalendar): Week
     $weekCalendar->onInactiveDate[] = function (DateTime $date) {
         // callback inactive row
     };
-    
+
     $weekCalendar->onSelectDate[] = function (DateTime $date) {
         $this->template->datum = $date;
 
