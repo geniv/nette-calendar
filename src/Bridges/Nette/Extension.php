@@ -17,7 +17,7 @@ class Extension extends CompilerExtension
 {
     /** @var array default values */
     private $defaults = [
-        'autowired'  => null,
+        'autowired'  => true,
         'processor'  => Processor::class,
         'offsetDay'  => 7,
         'firstDay'   => 0,
