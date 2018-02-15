@@ -23,13 +23,13 @@ neon configure:
 ```neon
 # calendar
 calendar:
-#   autowired: false
+#   autowired: true
 #   processor: Calendar\Processor
     offsetDay: 7    # offset next day
     firstDay: 0     # number first day
     lastDay: 6      # number last day
     fromTime: 11    # number from hour (modify)
-    countBlock: 7   # count block hour (modify)
+    countBlock: 10  # count block hour (modify)
     stepBlock: "+1 hour +30 minute" # offset hour (modify)
 ```
 
