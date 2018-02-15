@@ -33,6 +33,8 @@ class WeekCalendar extends Control
     private $loadData = [];
     /** @var IProcessor */
     private $processor;
+    /** @var array */
+    private $variableTemplate = [];
 
 
     /**
@@ -233,6 +235,20 @@ class WeekCalendar extends Control
 
 
     /**
+     * Add variable template.
+     *
+     * @param string $name
+     * @param        $values
+     * @return WeekCalendar
+     */
+    public function addVariableTemplate(string $name, $values): self
+    {
+        $this->variableTemplate[$name] = $values;
+        return $this;
+    }
+
+
+    /**
      * Render.
      */
     public function render()
@@ -243,6 +259,11 @@ class WeekCalendar extends Control
             $template->timeTable = $this->processor->process($this);
             $template->seekDay = $this->seekDay;
             $template->selectDay = $this->selectDay;
+
+            // add user defined variable
+            foreach ($this->variableTemplate as $name => $value) {
+                $template->$name = $value;
+            }
 
             $template->setTranslator($this->translator);
             $template->setFile($this->templatePath);
