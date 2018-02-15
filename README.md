@@ -56,6 +56,12 @@ load date:
 $weekCalendar->setLoadData(array $dates);
 ```
 
+set variable to calendar latte:
+-------------------------------
+```php
+$weekCalendar->addVariableTemplate('game', $game);
+```
+
 select date:
 ------------
 ```php

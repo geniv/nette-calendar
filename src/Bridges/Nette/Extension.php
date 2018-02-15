@@ -38,19 +38,12 @@ class Extension extends CompilerExtension
 
         // define week calendar
         $builder->addDefinition($this->prefix('week'))
-            ->setFactory(WeekCalendar::class, [$config]);
+            ->setFactory(WeekCalendar::class, [$config])
+            ->setAutowired($config['autowired']);
 
         // define week calendar logic processor
         $builder->addDefinition($this->prefix('processor'))
-            ->setFactory($config['processor']);
-
-        // if define autowired then set value
-        if (isset($config['autowired'])) {
-            $builder->getDefinition($this->prefix('default'))
-                ->setAutowired($config['autowired']);
-
-            $builder->getDefinition($this->prefix('processor'))
-                ->setAutowired($config['autowired']);
-        }
+            ->setFactory($config['processor'])
+            ->setAutowired($config['autowired']);
     }
 }
