@@ -3,6 +3,7 @@
 namespace Calendar;
 
 use DateTime;
+use GeneralForm\ITemplatePath;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 
@@ -13,7 +14,7 @@ use Nette\Localization\ITranslator;
  * @author  geniv
  * @package Calendar
  */
-class WeekCalendar extends Control
+class WeekCalendar extends Control implements ITemplatePath
 {
     /** @var array */
     private $parameters;
@@ -70,13 +71,11 @@ class WeekCalendar extends Control
     /**
      * Set template path.
      *
-     * @param $path
-     * @return WeekCalendar
+     * @param string $path
      */
-    public function setTemplatePath($path): self
+    public function setTemplatePath(string $path)
     {
         $this->templatePath = $path;
-        return $this;
     }
 
 

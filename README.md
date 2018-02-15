@@ -14,7 +14,8 @@ or
 require:
 ```json
 "php": ">=7.0.0",
-"nette/nette": ">=2.4.0"
+"nette/nette": ">=2.4.0",
+"geniv/nette-general-form": ">=1.0.0"
 ```
 
 Include in application
@@ -84,7 +85,7 @@ protected function createComponentWeekCalendar(WeekCalendar $weekCalendar): Week
     $weekCalendar->onInactiveDate[] = function (DateTime $date) {
         // callback inactive row
     };
-    
+
     $weekCalendar->onSelectDate[] = function (DateTime $date) {
         $this->template->datum = $date;
 
