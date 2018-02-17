@@ -4,6 +4,10 @@
             <th>{_'nette-calendar-day'}</th>
             <th colspan="{count($timeTable[0]['hours'])}">{_'nette-calendar-available-time-block'}</th>
         </tr>
+        <tr>
+            <th></th>
+            <th n:foreach="$timeTable[1]['hours'] as $index=>$item" n:if="$index%2==0" colspan="2">{date('H:i', $item['hour'])}</th>
+        </tr>
         <tr n:foreach="$timeTable as $dayItem">
             <td n:class="$dayItem['current'] ? info">{$dayItem['day']|date:'j.n.Y (N)'}</td>
             <td n:foreach="$dayItem['hours'] as $hourItem" n:class="$dayItem['current'] ? info : ($selectDay == $hourItem['hour'] ? success : ($hourItem['select']?danger))">
