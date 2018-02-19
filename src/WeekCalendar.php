@@ -5,6 +5,8 @@ namespace Calendar;
 use DateTime;
 use GeneralForm\ITemplatePath;
 use Nette\Application\UI\Control;
+use Nette\Http\Session;
+use Nette\Http\SessionSection;
 use Nette\Localization\ITranslator;
 
 
@@ -36,6 +38,8 @@ class WeekCalendar extends Control implements ITemplatePath
     private $processor;
     /** @var array */
     private $variableTemplate = [];
+    /** @var SessionSection */
+    private $sessionSection;
 
 
     /**
@@ -44,14 +48,20 @@ class WeekCalendar extends Control implements ITemplatePath
      * @param array            $parameters
      * @param ITranslator|null $translator
      * @param IProcessor       $processor
+     * @param Session          $session
      */
-    public function __construct(array $parameters, ITranslator $translator = null, IProcessor $processor)
+    public function __construct(array $parameters, ITranslator $translator = null, IProcessor $processor, Session $session)
     {
         parent::__construct();
 
         $this->parameters = $parameters;
         $this->translator = $translator;
         $this->processor = $processor;
+        $this->sessionSection = $session->getSection(__CLASS__);
+        // remove session section after refresh browser (true after restart)
+        if (isset($_SERVER['HTTP_CACHE_CONTROL']) && ($_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0' || $_SERVER['HTTP_CACHE_CONTROL'] == 'no-cache')) {
+            $this->sessionSection->remove();
+        }
 
         $this->templatePath = __DIR__ . '/WeekCalendar.latte';  // set path
     }
@@ -120,6 +130,7 @@ class WeekCalendar extends Control implements ITemplatePath
         if ($timestamp) {
             $this->seekDay = $seekDay;
             $this->selectDay = $timestamp;
+            $this->sessionSection['timestamp'] = $timestamp;    // save last select to session
 
             if ($this->presenter->isAjax()) {
                 $this->redrawControl('calendar');
@@ -257,7 +268,7 @@ class WeekCalendar extends Control implements ITemplatePath
 
             $template->timeTable = $this->processor->process($this);
             $template->seekDay = $this->seekDay;
-            $template->selectDay = $this->selectDay;
+            $template->selectDay = $this->selectDay ?: $this->sessionSection['timestamp'];  // load timestamp from variable or session
 
             // add user defined variable
             foreach ($this->variableTemplate as $name => $value) {
