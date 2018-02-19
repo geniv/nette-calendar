@@ -104,7 +104,7 @@ class WeekCalendar extends Control implements ITemplatePath
      * @param int $seekDay
      * @param int $timestamp
      */
-    public function handleNextWeek(int $seekDay, int $timestamp)
+    public function handleNextWeek(int $seekDay, int $timestamp = 0)
     {
         $this->seekDay = $seekDay + $this->parameters['offsetDay'];
         $this->lastTimestamp = $timestamp;
@@ -121,7 +121,7 @@ class WeekCalendar extends Control implements ITemplatePath
      * @param int $seekDay
      * @param int $timestamp
      */
-    public function handleSelectDate(int $seekDay, int $timestamp)
+    public function handleSelectDate(int $seekDay, int $timestamp = 0)
     {
         if ($timestamp) {
             $this->seekDay = $seekDay;
