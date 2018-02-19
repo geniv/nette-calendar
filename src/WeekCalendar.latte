@@ -25,10 +25,10 @@
         </tr>
         <tr>
             <td>
-                <a n:href="PrevWeek! $seekDay" class="ajax" n:if="$seekDay > 0">{_'nette-calendar-previous-week'}</a>
+                <a n:href="PrevWeek! $seekDaym, $lastTimestamp" class="ajax" n:if="$seekDay > 0">{_'nette-calendar-previous-week'}</a>
             </td>
             <td>
-                <a n:href="NextWeek! $seekDay" class="ajax">{_'nette-calendar-next-week'}</a>
+                <a n:href="NextWeek! $seekDay, $lastTimestamp" class="ajax">{_'nette-calendar-next-week'}</a>
             </td>
         </tr>
     </table>

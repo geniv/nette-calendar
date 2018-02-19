@@ -5,8 +5,6 @@ namespace Calendar;
 use DateTime;
 use GeneralForm\ITemplatePath;
 use Nette\Application\UI\Control;
-use Nette\Http\Session;
-use Nette\Http\SessionSection;
 use Nette\Localization\ITranslator;
 
 
@@ -20,7 +18,7 @@ class WeekCalendar extends Control implements ITemplatePath
 {
     /** @var array */
     private $parameters;
-    /** @var string template path */
+    /** @var string */
     private $templatePath;
     /** @var ITranslator */
     private $translator = null;
@@ -38,8 +36,8 @@ class WeekCalendar extends Control implements ITemplatePath
     private $processor;
     /** @var array */
     private $variableTemplate = [];
-    /** @var SessionSection */
-    private $sessionSection;
+    /** @var int */
+    private $lastTimestamp = null;
 
 
     /**
@@ -48,20 +46,14 @@ class WeekCalendar extends Control implements ITemplatePath
      * @param array            $parameters
      * @param ITranslator|null $translator
      * @param IProcessor       $processor
-     * @param Session          $session
      */
-    public function __construct(array $parameters, ITranslator $translator = null, IProcessor $processor, Session $session)
+    public function __construct(array $parameters, ITranslator $translator = null, IProcessor $processor)
     {
         parent::__construct();
 
         $this->parameters = $parameters;
         $this->translator = $translator;
         $this->processor = $processor;
-        $this->sessionSection = $session->getSection(__CLASS__);
-        // remove session section after refresh browser (true after restart)
-        if (isset($_SERVER['HTTP_CACHE_CONTROL']) && ($_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0' || $_SERVER['HTTP_CACHE_CONTROL'] == 'no-cache')) {
-            $this->sessionSection->remove();
-        }
 
         $this->templatePath = __DIR__ . '/WeekCalendar.latte';  // set path
     }
@@ -93,10 +85,12 @@ class WeekCalendar extends Control implements ITemplatePath
      * Handle prev week.
      *
      * @param int $seekDay
+     * @param int $timestamp
      */
-    public function handlePrevWeek(int $seekDay)
+    public function handlePrevWeek(int $seekDay, int $timestamp)
     {
         $this->seekDay = $seekDay - $this->parameters['offsetDay'];
+        $this->lastTimestamp = $timestamp;
 
         if ($this->presenter->isAjax()) {
             $this->redrawControl('calendar');
@@ -108,10 +102,12 @@ class WeekCalendar extends Control implements ITemplatePath
      * Handle next week.
      *
      * @param int $seekDay
+     * @param int $timestamp
      */
-    public function handleNextWeek(int $seekDay)
+    public function handleNextWeek(int $seekDay, int $timestamp)
     {
         $this->seekDay = $seekDay + $this->parameters['offsetDay'];
+        $this->lastTimestamp = $timestamp;
 
         if ($this->presenter->isAjax()) {
             $this->redrawControl('calendar');
@@ -130,7 +126,7 @@ class WeekCalendar extends Control implements ITemplatePath
         if ($timestamp) {
             $this->seekDay = $seekDay;
             $this->selectDay = $timestamp;
-            $this->sessionSection['timestamp'] = $timestamp;    // save last select to session
+            $this->lastTimestamp = $timestamp;
 
             if ($this->presenter->isAjax()) {
                 $this->redrawControl('calendar');
@@ -268,7 +264,8 @@ class WeekCalendar extends Control implements ITemplatePath
 
             $template->timeTable = $this->processor->process($this);
             $template->seekDay = $this->seekDay;
-            $template->selectDay = $this->selectDay ?: $this->sessionSection['timestamp'];  // load timestamp from variable or session
+            $template->selectDay = $this->selectDay ?: $this->lastTimestamp;  // load timestamp from variable or last time stamp
+            $template->lastTimestamp = $this->lastTimestamp;
 
             // add user defined variable
             foreach ($this->variableTemplate as $name => $value) {
