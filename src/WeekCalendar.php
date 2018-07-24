@@ -266,7 +266,7 @@ class WeekCalendar extends Control implements ITemplatePath
             $template->seekDay = $this->seekDay;
             $template->selectDay = $this->selectDay ?: $this->lastTimestamp;  // load timestamp from variable or last time stamp
             $template->lastTimestamp = $this->lastTimestamp;
-//TODO something...
+
             // add user defined variable
             foreach ($this->variableTemplate as $name => $value) {
                 $template->$name = $value;
